@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+:root {
+  --orka-bg:         #07070C;
+  --orka-surface:    #0F0F1A;
+  --orka-surface2:   #151526;
+  --orka-border:     #1E1E35;
+  --orka-blue:       #3B82F6;
+  --orka-purple:     #7C3AED;
+  --orka-cyan:       #06B6D4;
+  --orka-glow-blue:  rgba(59,130,246,0.15);
+  --orka-glow-purp:  rgba(124,58,237,0.15);
+  --orka-text:       #E8E8F0;
+  --orka-muted:      #6B6B8A;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--orka-bg);
+  color: var(--orka-text);
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.glow-blue  { box-shadow: 0 0 20px var(--orka-glow-blue); }
+.glow-purp  { box-shadow: 0 0 20px var(--orka-glow-purp); }
+.card       { background: var(--orka-surface); border: 1px solid var(--orka-border); border-radius: 12px; }
+.card-inner { background: var(--orka-surface2); border: 1px solid var(--orka-border); border-radius: 8px; }
