@@ -13,8 +13,8 @@ export default function Footer() {
         <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", gap: 40, marginBottom: 56 }}>
           {/* Brand */}
           <div>
-            <p style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 800, color: "var(--lp-text)", marginBottom: 12 }}>
-              orka<span style={{ color: "var(--lp-purple)" }}>.</span>
+            <p style={{ fontFamily: "var(--font-display)", fontSize: 22, fontWeight: 800, color: "var(--lp-text)", marginBottom: 12, display: "flex", alignItems: "center", gap: 8 }}>
+              <span style={{ fontSize: 24 }}>🐋</span> Orka
             </p>
             <p style={{ fontSize: 14, color: "var(--lp-muted)", lineHeight: 1.7, maxWidth: 260, marginBottom: 20 }}>
               Inteligência artificial para lojistas que querem tomar melhores decisões, mais rápido.

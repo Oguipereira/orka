@@ -1,13 +1,13 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-import { Activity, Menu, X, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 const links = [
   { href: "#features",    label: "Features" },
   { href: "#integrations",label: "Integrações" },
-  { href: "/build-in-public", label: "Build in Public" },
   { href: "#pricing",     label: "Pricing" },
+  { href: "/build-in-public", label: "Empresa" },
 ];
 
 export default function Navbar() {
@@ -23,15 +23,8 @@ export default function Navbar() {
         maxWidth: 1100, marginLeft: "auto", marginRight: "auto",
       }}>
         {/* Logo */}
-        <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{
-            width: 32, height: 32, borderRadius: 8,
-            background: "var(--lp-grad)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            boxShadow: "0 0 16px rgba(124,58,237,0.4)",
-          }}>
-            <Activity size={16} color="#fff" strokeWidth={2.5} />
-          </div>
+        <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ fontSize: 24, lineHeight: 1 }}>🐋</span>
           <span style={{ fontSize: 18, fontWeight: 700, color: "var(--lp-text)", fontFamily: "var(--font-display)" }}>
             Orka
           </span>
