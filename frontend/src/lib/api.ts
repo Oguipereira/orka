@@ -24,3 +24,16 @@ api.interceptors.response.use(
 );
 
 export default api;
+
+export const authAPI = {
+  login:    (email: string, password: string) =>
+    api.post('/auth/login', { email, password }),
+  register: (name: string, email: string, password: string, org_name: string) =>
+    api.post('/auth/register', { name, email, password, org_name }),
+}
+
+export const integAPI = {
+  list:       (org_id: string) => api.get(`/integrations/?org_id=${org_id}`),
+  connectUrl: (platform: string) => api.get(`/integrations/connect/${platform}`),
+  disconnect: (id: string) => api.delete(`/integrations/${id}`),
+}

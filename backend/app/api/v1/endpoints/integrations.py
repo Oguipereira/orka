@@ -59,6 +59,76 @@ async def get_sync_logs(
     ]
 
 
+# ── Generic connect URL ──────────────────────────────────────
+
+@router.get("/connect/{platform}")
+async def connect_url(
+    platform: str,
+    shop: str | None = None,
+    current_user: User = Depends(get_current_user),
+    org_id: str = Depends(get_current_org_id),
+):
+    urls: dict[str, str] = {
+        "mercado_livre": (
+            f"https://auth.mercadolivre.com.br/authorization"
+            f"?response_type=code&client_id={settings.ML_APP_ID}"
+            f"&redirect_uri={settings.ML_REDIRECT_URI}&state={org_id}"
+        ) if settings.ML_APP_ID else "",
+        "shopify": (
+            f"https://{shop}/admin/oauth/authorize"
+            f"?client_id={getattr(settings, 'SHOPIFY_CLIENT_ID', '')}"
+            f"&scope=read_orders,read_products"
+            f"&redirect_uri={getattr(settings, 'SHOPIFY_REDIRECT_URI', '')}"
+            f"&response_type=code"
+        ) if shop else "",
+        "stripe": (
+            f"https://connect.stripe.com/oauth/authorize"
+            f"?response_type=code&client_id={getattr(settings, 'STRIPE_CLIENT_ID', '')}&scope=read_write"
+        ),
+        "mercadopago": (
+            f"https://auth.mercadopago.com.br/authorization"
+            f"?client_id={getattr(settings, 'MP_CLIENT_ID', '')}"
+            f"&response_type=code&platform_id=mp"
+            f"&redirect_uri={getattr(settings, 'MP_REDIRECT_URI', '')}"
+        ),
+        "amazon": (
+            f"https://sellercentral.amazon.com.br/apps/authorize/consent"
+            f"?application_id={getattr(settings, 'AMAZON_LWA_CLIENT_ID', '')}&state={org_id}&version=beta"
+        ),
+        "nuvemshop": (
+            f"https://www.tiendanube.com/apps/{getattr(settings, 'NUVEMSHOP_CLIENT_ID', '')}/authorize"
+        ),
+        "bling": (
+            f"https://bling.com.br/Api/v3/oauth/authorize"
+            f"?response_type=code&client_id={getattr(settings, 'BLING_CLIENT_ID', '')}"
+            f"&state={org_id}&redirect_uri={getattr(settings, 'BLING_REDIRECT_URI', '')}"
+        ),
+    }
+    if platform not in urls:
+        raise HTTPException(404, f"Plataforma '{platform}' não suportada")
+    url = urls[platform]
+    if not url:
+        raise HTTPException(400, f"Credenciais para '{platform}' não configuradas no .env")
+    return {"platform": platform, "redirect_url": url}
+
+
+@router.delete("/{integration_id}")
+async def disconnect_integration(
+    integration_id: str,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    result = await db.execute(
+        select(Integration).where(Integration.id == uuid.UUID(integration_id))
+    )
+    integ = result.scalar_one_or_none()
+    if not integ:
+        raise HTTPException(404, "Integração não encontrada")
+    await db.delete(integ)
+    await db.commit()
+    return {"status": "disconnected", "platform": integ.platform}
+
+
 # ── Mercado Livre ────────────────────────────────────────────
 
 @router.get("/mercadolivre/connect")
